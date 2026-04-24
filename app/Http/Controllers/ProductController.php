@@ -28,6 +28,7 @@ class ProductController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -36,6 +37,21 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+
+        $validated = $request->validate([
+            "name"=>"required|string",
+            "quantity"=>"required|integer",
+            "value"=>"required|decimal:2",
+            "price"=>"required|decimal:2"
+        ]);
+
+
+
+        $new_product = new Product($validated);
+
+        $new_product->save();
+
+        return redirect()->route('products.index')->with('success','Create succesfully');
     }
 
     /**
