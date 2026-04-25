@@ -8,16 +8,35 @@
     <x-product-form :product="$new_product" :type="Status::Create"/>
 
     
+    <div>
+        <input type="text" id="search" class="border border-black p-2 rounded-1 m-3" placeholder="search...">
+    </div>
 
-    <div class="row">
-        @foreach ($products as $product)
-            <div class="col-12 col-md-6 col-lg-4">
-                <x-product-component :product="$product"/>
-            </div>
-        @endforeach
+    <div class="row list">
+        <x-products-list :products="$products"/>
     </div>
 
     <div class="m-3">
         {{ $products->links() }}
     </div>
+
+    <script>
+        let timeout = null;
+
+        const input = document.getElementById("search");
+
+        input.addEventListener('input',(e)=>{
+            clearTimeout(timeout);
+
+            const listElement =document.querySelector(".list");
+
+            timeout = setTimeout(()=>{
+                const query = e.target.value;
+
+                if(!query) return;
+
+                fetch(`/products/search?q=${query}`).then(r=>r.json()).then(r=>listElement.innerHTML=r.html);
+            });
+        },300);
+    </script>
 </x-layout>

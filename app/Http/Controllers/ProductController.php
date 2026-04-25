@@ -13,14 +13,26 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         //
-        $name = $request->query("name");
 
-        $products = Product::orderBy("name","asc")->whereLike("name","$name%")->cursorPaginate(6);
+        $products = Product::orderBy("name","asc")->cursorPaginate(6);
 
         $new_product = new Product();
 
         return view('products.index', ["products"=>$products,"new_product"=>$new_product]);
     }
+
+    public function search(Request $request){
+        $query = $request->query("q","");
+
+        $products = Product::orderBy("name","asc")->whereLike("name","$query%")->cursorPaginate(6);
+
+        $html = view("components.products-list",compact("products"))->render();
+
+        return [
+            "html"=>$html
+        ];
+    } 
+
 
     /**
      * Show the form for creating a new resource.
