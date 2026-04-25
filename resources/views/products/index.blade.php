@@ -5,7 +5,7 @@
         </div>
     @endif
 
-    <x-product-form :product="$new_product" :type="Status::Create"/>
+    <x-product-form :product="$new_product" :type="FormType::Create"/>
 
     
     <div>
@@ -25,7 +25,7 @@
 
         const input = document.getElementById("search");
 
-        input.addEventListener('input',(e)=>{
+        input.addEventListener('keyup',(e)=>{
             clearTimeout(timeout);
 
             const listElement =document.querySelector(".list");
@@ -33,10 +33,13 @@
             timeout = setTimeout(()=>{
                 const query = e.target.value;
 
-                if(!query) return;
+                if(!query) {
+                    location.reload();
+                    return;
+                };
 
                 fetch(`/products/search?q=${query}`).then(r=>r.json()).then(r=>listElement.innerHTML=r.html);
-            });
-        },300);
+            },300);
+        });
     </script>
 </x-layout>

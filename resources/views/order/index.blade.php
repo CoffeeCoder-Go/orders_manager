@@ -5,7 +5,7 @@
         </div>
     @endif
 
-    <x-order-form :order="$new_order" :type="\App\Enums\FormType::Create"/>
+    <x-order-form :order="$new_order" :type="FormType::Create"/>
 
     <form action="{{ route('orders.index') }}" method="get" class="container p-4">
         <div class="d-flex">

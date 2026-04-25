@@ -24,7 +24,7 @@ class ProductController extends Controller
     public function search(Request $request){
         $query = $request->query("q","");
 
-        $products = Product::orderBy("name","asc")->whereLike("name","$query%")->cursorPaginate(6);
+        $products = Product::orderBy("name","asc")->whereLike("name","$query%")->get();
 
         $html = view("components.products-list",compact("products"))->render();
 
@@ -69,9 +69,10 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
         //
+        return view('products.show',compact('product'));
     }
 
     /**
@@ -85,16 +86,32 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Product $product)
     {
         //
+
+        $validated = $request->validate([
+            "name"=>"required|string",
+            "quantity"=>"required|integer",
+            "value"=>"required|decimal:2",
+            "price"=>"required|decimal:2"
+        ]);
+
+        $product->update($validated);
+
+        return redirect()->route('products.show',$product->id)->with('success','Updated succesfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
         //
+        $product->delete();
+
+        return redirect(status: 200)->route('products.index')->with('success','Deletado com sucesso!');
     }
+
+
 }

@@ -7,7 +7,7 @@
 
     
 
-    <x-order-form :order="$order" :type="\App\Enums\FormType::Update"/>
+    <x-order-form :order="$order" :type="FormType::Update"/>
 
     <button id="btn-delete" class="btn btn-primary m-3" data-id="{{ $order->id }}">Deletar</button>
 

@@ -15,7 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
     'aliases' => [
-        'Status' => App\Enums\FormType::class,
+        'FormType' => App\Enums\FormType::class,
     ],
 
     /*

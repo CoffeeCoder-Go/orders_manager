@@ -32,6 +32,6 @@ Route::prefix("products")->name("products.")->group(function(){
     
     Route::put("/{product}",[ProductController::class,"update"])->name("update");
 
-    Route::delete("/{product}",[ProductController::class,"delete"])->name("delete");
+    Route::delete("/{product}",[ProductController::class,"destroy"])->name("delete");
 });
 
