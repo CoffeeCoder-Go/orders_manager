@@ -35,3 +35,6 @@ Route::prefix("products")->name("products.")->group(function(){
     Route::delete("/{product}",[ProductController::class,"destroy"])->name("delete");
 });
 
+Route::prefix("items")->name("items.")->group(function (){
+    Route::post("/{order}",[OrderController::class,"insertItem"])->name("insert");
+});

@@ -3,12 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Product;
+use App\Services\ItemService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 class OrderController extends Controller
 {
+    protected $itemService;
+
+    public function __construct(ItemService $itemService)
+    {
+        $this->itemService = $itemService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -24,13 +33,7 @@ class OrderController extends Controller
         return view("order.index",["orders"=>$orders,"new_order"=>$new_order]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -60,17 +63,39 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         //
-        return view('order.show',['order'=>$order]);
+        $items = $order->items()->get();
 
+        $products = Product::all();
+
+        return view('order.show',['order'=>$order,'items'=>$items,'products'=>$products]);
+
+    }
+
+    public function insertItem(Request $request,Order $order){
+
+
+        try {
+            $validated = $request->validate([
+                'quantity' => 'required|integer',
+                'product'=>'required|integer'
+            ]);
+
+            $product = Product::findOrFail($validated['product']);
+
+            $this->itemService->insert($order, $product, $validated);
+
+            
+
+            return redirect()->route('orders.show',$order->id)->with('success','Inserido com sucesso!');
+        } catch (\Exception $th) {
+            //throw $th;
+            echo "not trated!";
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
