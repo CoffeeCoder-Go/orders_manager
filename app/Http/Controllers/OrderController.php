@@ -89,7 +89,7 @@ class OrderController extends Controller
             return redirect()->route('orders.show',$order->id)->with('success','Inserido com sucesso!');
         } catch (\Exception $th) {
             //throw $th;
-            echo "not trated!";
+            return view('errors.error',["error"=>$th->getMessage()]);
         }
     }
 

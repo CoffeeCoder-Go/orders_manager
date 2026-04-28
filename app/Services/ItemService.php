@@ -1,6 +1,8 @@
 <?php
 namespace App\Services;
 
+use App\Events\OrderValue;
+use App\Events\ProductQuantity;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\Product;
@@ -19,13 +21,16 @@ class ItemService{
         }
 
 
-        $order->items()->create([
+        $item = new Item([
             "product_id" => $product->id,
             "quantity" => $data["quantity"],
             "value"=>$product->price * $data["quantity"],
         ]);
 
-        $product->quantity -= $data['quantity'];
-        $product->save();
+        $order->items()->save($item);
+
+        event(new ProductQuantity($product,$item));
+        event(new OrderValue($order,$item));
+
     }
 }
