@@ -11,12 +11,7 @@ use Illuminate\Support\Facades\Cache;
 
 class OrderController extends Controller
 {
-    protected $itemService;
-
-    public function __construct(ItemService $itemService)
-    {
-        $this->itemService = $itemService;
-    }
+    
 
     /**
      * Display a listing of the resource.
@@ -71,27 +66,7 @@ class OrderController extends Controller
 
     }
 
-    public function insertItem(Request $request,Order $order){
-
-
-        try {
-            $validated = $request->validate([
-                'quantity' => 'required|integer',
-                'product'=>'required|integer'
-            ]);
-
-            $product = Product::findOrFail($validated['product']);
-
-            $this->itemService->insert($order, $product, $validated);
-
-            
-
-            return redirect()->route('orders.show',$order->id)->with('success','Inserido com sucesso!');
-        } catch (\Exception $th) {
-            //throw $th;
-            return view('errors.error',["error"=>$th->getMessage()]);
-        }
-    }
+    
 
     /**
      * Show the form for editing the specified resource.

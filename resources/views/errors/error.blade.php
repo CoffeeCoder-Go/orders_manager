@@ -1,1 +1,3 @@
-<h1>{{$error}}</h1>
+<h1 class="text-uppercase">{{$error}}</h1>
+
+<a href="{{ route('home') }}" class="btn btn-primary">Voltar</a>

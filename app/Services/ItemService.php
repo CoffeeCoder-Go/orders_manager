@@ -6,6 +6,8 @@ use App\Events\ProductQuantity;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Type\Integer;
 
 class ItemService{
 
@@ -27,10 +29,29 @@ class ItemService{
             "value"=>$product->price * $data["quantity"],
         ]);
 
-        $order->items()->save($item);
+        DB::transaction(function() use ($item, $order,$product){
+            $order->items()->save($item);
+            $product->update(["quantity"=>$product->quantity - $item->quantity]);
+            $order->update(["value"=>$order->value + $item->value]);
+        });
 
-        event(new ProductQuantity($product,$item));
-        event(new OrderValue($order,$item));
+        
 
     }
+
+    public function delete(Item $item): int{
+        $order = Order::findOrFail($item->order_id);
+        $product = Product::findOrFail($item->product_id);
+
+        DB::transaction(function () use($item,$order,$product){
+            $newValue = $order->value - $item->value;
+            $newQuantity = $product->quantity + $item->quantity;
+
+            $order->update(["value"=>$newValue]);
+            $product->update(["quantity"=>$newQuantity]);
+            $item->delete();
+        });
+
+        return $order->id;
+    } 
 }

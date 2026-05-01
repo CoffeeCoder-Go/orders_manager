@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -36,5 +37,6 @@ Route::prefix("products")->name("products.")->group(function(){
 });
 
 Route::prefix("items")->name("items.")->group(function (){
-    Route::post("/{order}",[OrderController::class,"insertItem"])->name("insert");
+    Route::post("/{order}",[ItemController::class,"insert"])->name("insert");
+    Route::delete("/{item}",[ItemController::class,"delete"])->name("delete");
 });

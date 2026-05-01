@@ -14,10 +14,12 @@
 
     <div class="container p-3 border border-black rounded-2 m-3">
         <h1>Items</h1>
-        <div class="d-flex">
-            <x-item-form :order="$order" :products="$products"/>
+        <div class="row">
+            <div class="col-md-4 col-12">
+                <x-item-form :order="$order" :products="$products"/>
+            </div>
 
-            <div class="row">
+            <div class="col-md-8 col-12">
                 @foreach ($items as $item)
                     <div class="col-12 col-md-4 col-lg-3">
                         <x-item-component :item="$item"/>
