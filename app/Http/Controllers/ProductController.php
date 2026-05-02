@@ -14,7 +14,7 @@ class ProductController extends Controller
     {
         //
 
-        $products = Product::orderBy("name","asc")->cursorPaginate(6);
+        $products = $request->user()->products()->orderBy("name","asc")->cursorPaginate(6);
 
         $new_product = new Product();
 
@@ -24,7 +24,7 @@ class ProductController extends Controller
     public function search(Request $request){
         $query = $request->query("q","");
 
-        $products = Product::orderBy("name","asc")->whereLike("name","$query%")->get();
+        $products = $request->user()->products()->orderBy("name","asc")->whereLike("name","$query%")->get();
 
         $html = view("components.products-list",compact("products"))->render();
 
@@ -61,7 +61,7 @@ class ProductController extends Controller
 
         $new_product = new Product($validated);
 
-        $new_product->save();
+        $request->user()->products()->save($new_product);
 
         return redirect()->route('products.index')->with('success','Create succesfully');
     }

@@ -1,4 +1,10 @@
 <x-layout>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="carousel slide border-bottom border-black border-5" id="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">

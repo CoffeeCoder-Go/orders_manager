@@ -23,7 +23,7 @@ class OrderController extends Controller
         //
         $name = $request->query("name","");
   
-        $orders = Order::orderBy("name","desc")->whereLike("name","$name%",caseSensitive: true)->cursorPaginate(6);
+        $orders = $request->user()->orders()->orderBy("name","desc")->whereLike("name","$name%",caseSensitive: true)->cursorPaginate(6);
 
         $new_order = new Order();
 
@@ -49,7 +49,7 @@ class OrderController extends Controller
     
         $new_order = new Order($validated);
 
-        $new_order->save();
+        $request->user()->orders()->save($new_order);
 
         return redirect()->route('orders.create')->with('success','Create succesfully');
     }

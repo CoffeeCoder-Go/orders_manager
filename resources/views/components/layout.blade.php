@@ -14,13 +14,37 @@
             <a href="{{ route('home') }}" class="navbar-brand text-white fw-bold text-uppercase">Home</a>
 
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="{{ route('orders.index') }}" class="nav-link text-white text-uppercase">Orders</a>
-                   
-                </li>
-                <li class="nav-item">
-                     <a href="{{ route('products.index') }}" class="nav-link text-white text-uppercase">Products</a>
-                </li>
+                @if (Auth::check())
+                    <li class="nav-item">
+                        <a href="{{ route('orders.index') }}" class="nav-link text-white text-uppercase">Orders</a>
+                    
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('products.index') }}" class="nav-link text-white text-uppercase">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{{  route('auth.logout') }}" method="post">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-primary">Logout</button>
+                        </form>
+                    </li>
+
+                @else
+                    <li class="nav-item m-3">
+                        <a href="{{ route('users.login') }}" class="btn btn-primary">Login</a>
+                    </li>
+
+                    <li class="nav-item m-3">
+                        <a href="{{ route('users.signup') }}" class="btn btn-primary">Signup</a>
+                    </li>
+                @endif
+
+
+                
+
+                
             </ul>
         </div>
 

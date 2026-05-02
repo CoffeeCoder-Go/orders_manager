@@ -16,7 +16,8 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
     'aliases' => [
         'FormType' => App\Enums\FormType::class,
-        'Product'=>App\Models\Product::class
+        'Product'=>App\Models\Product::class,
+        'Auth'=>Illuminate\Support\Facades\Auth::class,
     ],
 
     /*

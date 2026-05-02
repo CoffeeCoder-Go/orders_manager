@@ -3,12 +3,23 @@
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
 })->name("home");
 
+Route::prefix("users")->name("users.")->group(function (){
+    Route::get("/login", fn () => view('users.login'))->name("login");
+    Route::get("/signup", fn () => view('users.signup'))->name("signup");
+})->middleware("guest");
+
+Route::prefix("auth")->name("auth.")->group(function (){
+    Route::post("/login",[UserController::class,'login'])->name('login');
+    Route::post("/signup",[UserController::class,'signup'])->name('signup');
+    Route::delete("/logout",[UserController::class,"logout"])->name('logout');
+})->middleware("guest");
 
 Route::prefix("orders")->name("orders.")->group(function(){
     Route::get("/",[OrderController::class,"index"])->name("index");
@@ -20,7 +31,7 @@ Route::prefix("orders")->name("orders.")->group(function(){
     Route::put("/{order}",[OrderController::class,"update"])->name("update");
 
     Route::delete("/{order}",[OrderController::class,"destroy"])->name("delete");
-});
+})->middleware("auth");
 
 Route::prefix("products")->name("products.")->group(function(){
     Route::get("/",[ProductController::class,'index'])->name("index");
@@ -34,9 +45,9 @@ Route::prefix("products")->name("products.")->group(function(){
     Route::put("/{product}",[ProductController::class,"update"])->name("update");
 
     Route::delete("/{product}",[ProductController::class,"destroy"])->name("delete");
-});
+})->middleware("auth");
 
 Route::prefix("items")->name("items.")->group(function (){
     Route::post("/{order}",[ItemController::class,"insert"])->name("insert");
     Route::delete("/{item}",[ItemController::class,"delete"])->name("delete");
-});
+})->middleware("auth");
