@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\ItemService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 
 class OrderController extends Controller
 {
     
+
+    public function __construct(public ItemService $item_service){}
 
     /**
      * Display a listing of the resource.
@@ -97,7 +99,11 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
-        $order->delete();
+        DB::transaction(function () use ($order){
+            $this->item_service->deleteAllFrom($order);
+            $order->delete();
+        });
+
         return redirect()->route('orders.index')->with("success","deleted succesfully");
     }
 }

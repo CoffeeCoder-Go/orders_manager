@@ -40,18 +40,29 @@ class ItemService{
     }
 
     public function delete(Item $item): int{
-        $order = Order::findOrFail($item->order_id);
-        $product = Product::findOrFail($item->product_id);
+        $order = $item->order;
+        $product = $item->product;
 
         DB::transaction(function () use($item,$order,$product){
-            $newValue = $order->value - $item->value;
-            $newQuantity = $product->quantity + $item->quantity;
 
-            $order->update(["value"=>$newValue]);
-            $product->update(["quantity"=>$newQuantity]);
+            $order->decrement("value",$item->value);
+            $product->increment("quantity",$item->quantity);
             $item->delete();
         });
 
         return $order->id;
     } 
+
+    public function deleteAllFrom(Order $order){
+        
+
+        foreach($order->items as $item){
+            $item->product->increment('quantity',$item->quantity);
+
+        }
+
+        $order->items()->delete();
+
+        return true;
+    }
 }
