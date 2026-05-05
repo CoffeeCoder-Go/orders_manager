@@ -5,7 +5,7 @@
         <label for="product" class="form-label">Product</label>
         <select name="product" class="form-select" aria-label="Select a product">
             @foreach ($products as $product)
-                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                <option value="{{ $product->id }}">{{ $product->name }} - {{ $product->quantity }} unidade(s) - <span class="text-success">R${{ number_format($product->price,2,",",".") }}</span></option>
             @endforeach
         </select>
     </div>

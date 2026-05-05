@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
-    protected $fillable = ["id","name","quantity","value","price"];
+    protected $fillable = ["id","name","quantity","value","price","user_id"];
 
     public function items(): HasMany {
         return $this->hasMany(Item::class);

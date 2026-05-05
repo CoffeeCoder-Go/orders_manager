@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Item extends Model
 {
     //
-    protected $fillable = ["id","order_id","product_id","quantity","value"];
+    protected $fillable = ["id","order_id","product_id","quantity","value","user_id"];
 
     public function product(): BelongsTo{
         return $this->belongsTo(Product::class);

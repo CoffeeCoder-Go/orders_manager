@@ -25,6 +25,7 @@ class ItemService{
 
         $item = new Item([
             "product_id" => $product->id,
+            "user_id"=>$order->user_id,
             "quantity" => $data["quantity"],
             "value"=>$product->price * $data["quantity"],
         ]);

@@ -7,6 +7,7 @@ use App\Services\ItemService;
 use App\Models\Item;
 use App\Models\Product;
 use App\Models\Order;
+use Illuminate\Support\Facades\Gate;
 
 class ItemController extends Controller
 {
@@ -40,6 +41,8 @@ class ItemController extends Controller
 
     public function delete(Item $item){
         try{
+            Gate::authorize("delete",$item);
+
             $order = $this->itemService->delete($item);
 
             return redirect()->route('orders.show',$order)->with("success","Delete succesfully!");

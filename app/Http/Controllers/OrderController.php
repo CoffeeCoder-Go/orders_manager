@@ -8,6 +8,7 @@ use App\Services\ItemService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
 {
@@ -79,6 +80,8 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
+        Gate::authorize("update",$order);
+
         //
         $validated = $request->validate([
             "name"=>"required|max:255",
@@ -98,6 +101,7 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
+        Gate::authorize("delete",$order);
         //
         DB::transaction(function () use ($order){
             $this->item_service->deleteAllFrom($order);
